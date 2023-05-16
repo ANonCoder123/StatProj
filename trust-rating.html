@@ -58,16 +58,28 @@
         break;
     }
 
+    // Define the names of each person
+    const personNames = [
+      "John",
+      "Emily",
+      "Michael",
+      "Sophia",
+      "David",
+      "Emma",
+      "Daniel"
+      // Add more names as needed
+    ];
+
     // Generate input fields for rating each person
-    for (let i = 1; i <= numberOfPeople; i++) {
+    for (let i = 0; i < numberOfPeople; i++) {
       const label = document.createElement("label");
-      label.innerHTML = "Person " + i + ": ";
+      label.innerHTML = "Person " + (i + 1) + " (" + personNames[i] + "): ";
       
       const input = document.createElement("input");
       input.type = "number";
       input.min = 1;
       input.max = 10;
-      input.id = "rating" + i;
+      input.id = "rating" + (i + 1);
       input.required = true;
 
       const lineBreak = document.createElement("br");
