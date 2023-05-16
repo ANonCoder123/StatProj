@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Trust Rating</title>
+</head>
+<body>
+  <h1>Trust Rating</h1>
+  <p>Please rate each person in your group on a scale from 1 to 10 based on how much you trust them, with 10 being the most and 1 being the least.</p>
+  
+  <form id="trustRatingForm">
+    <!-- Add input fields for rating each person dynamically -->
+    <div id="ratingFields"></div>
+    
+    <br>
+    <input type="submit" value="Submit">
+  </form>
+
+  <script>
+    // Retrieve the group and period from the URL query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const group = urlParams.get("group");
+    const period = urlParams.get("period");
+
+    // Define the number of people for each group and period
+    let numberOfPeople;
+    switch (group) {
+      case "group1":
+        switch (period) {
+          case "1":
+            numberOfPeople = 5;
+            break;
+          case "2":
+            numberOfPeople = 7;
+            break;
+          // Add more cases for other periods in group1 as needed
+          default:
+            numberOfPeople = 0;
+            break;
+        }
+        break;
+      case "group2":
+        switch (period) {
+          case "1":
+            numberOfPeople = 4;
+            break;
+          case "2":
+            numberOfPeople = 6;
+            break;
+          // Add more cases for other periods in group2 as needed
+          default:
+            numberOfPeople = 0;
+            break;
+        }
+        break;
+      // Add more cases for other groups as needed
+      default:
+        numberOfPeople = 0;
+        break;
+    }
+
+    // Generate input fields for rating each person
+    for (let i = 1; i <= numberOfPeople; i++) {
+      const label = document.createElement("label");
+      label.innerHTML = "Person " + i + ": ";
+      
+      const input = document.createElement("input");
+      input.type = "number";
+      input.min = 1;
+      input.max = 10;
+      input.required = true;
+
+      const lineBreak = document.createElement("br");
+
+      document.getElementById("ratingFields").appendChild(label);
+      document.getElementById("ratingFields").appendChild(input);
+      document.getElementById("ratingFields").appendChild(lineBreak);
+    }
+
+    // Handle form submission
+    document.getElementById("trustRatingForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      // Retrieve ratings for each person
+      const ratings = [];
+      for (let i = 1; i <= numberOfPeople; i++) {
+        const ratingInput = document.getElementById("rating" + i);
+        ratings.push(ratingInput.value);
+      }
+
+      // Do further processing with the ratings or store them as needed
+      
+      // Optionally, redirect to a thank you page or display a success message
+      alert("Thank you for your ratings!");
+
+      // Replace "thank-you.html" with the desired destination page
+      window.location.href = "thank-you.html";
+    });
+  </script>
+</body>
+</html>
