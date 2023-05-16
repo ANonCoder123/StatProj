@@ -34,22 +34,22 @@
     const period = urlParams.get("period");
 
     // Retrieve the names of people from the same period
-database.ref("statpsych-9ff2a/participants")
-  .orderByChild("period")
-  .equalTo(period)
-  .once("value")
-  .then(function(snapshot) {
-    const participants = snapshot.val();
-    if (participants) {
-      const personNames = Object.values(participants).map(participant => participant.name);
-      generateRatingFields(personNames);
-    } else {
-      console.log("No participants found for the specified period.");
-    }
-  })
-  .catch(function(error) {
-    console.log("Error retrieving participants:", error);
-  });
+    database.ref("statpsych-9ff2a/participants")
+      .orderByChild("period")
+      .equalTo(period)
+      .once("value")
+      .then(function(snapshot) {
+        const participants = snapshot.val();
+        if (participants) {
+          const personNames = Object.values(participants).map(participant => participant.name);
+          generateRatingFields(personNames);
+        } else {
+          console.log("No participants found for the specified period.");
+        }
+      })
+      .catch(function(error) {
+        console.log("Error retrieving participants:", error);
+      });
 
     // Generate input fields for rating each person
     function generateRatingFields(names) {
@@ -83,15 +83,19 @@ database.ref("statpsych-9ff2a/participants")
       const ratings = [];
       const ratingInputs = document.querySelectorAll('input[type="number"]');
       ratingInputs.forEach(function(input) {
-        ratings.push(input.value
-);
-});
+        ratings.push(input.value);
+      });
       
-  // Do further processing with the ratings or store them as needed
-  
-  // Optionally, redirect to a thank you page or display a success message
-  alert("Thank you for your ratings!");
+      // Do further processing with the ratings or store them as needed
+      
+      // Optionally, redirect to a thank you page or display a success message
+      alert("Thank you for your ratings!");
 
-  // Replace "thank-you.html" with the desired destination page
-  window.location.href = "thank-you.html";
-});
+      // Replace "thank-you.html" with the desired destination page
+      window.location.href = "thank-you.html";
+    });
+  </script>
+</body>
+</html>
+``
+`
