@@ -31,7 +31,21 @@
     <input type="submit" value="Submit">
   </form>
 
+  <script src="https://www.gstatic.com/firebasejs/9.1.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.1.1/firebase-database.js"></script>
   <script>
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDCQsvxFwCd7MYoTd_sX_hBLm1qaAXKYCE",
+      authDomain: "statpsych-9ff2a.firebaseapp.com",
+      projectId: "statpsych-9ff2a",
+      storageBucket: "statpsych-9ff2a.appspot.com",
+      messagingSenderId: "920441366178",
+      appId: "1:920441366178:web:bb36fe038d209458bc99fb",
+      measurementId: "G-RW90TV8H9W"
+    };
+    firebase.initializeApp(firebaseConfig);
+
     document.getElementById("registrationForm").addEventListener("submit", function(event) {
       event.preventDefault();
 
@@ -42,9 +56,19 @@
       var race = document.getElementById("race").value;
       var period = document.getElementById("period").value;
 
+      // Save participant registration data to Firebase database
+      firebase.database().ref("participants").push({
+        name: name,
+        age: age,
+        gender: gender,
+        race: race,
+        period: period
+      });
+
       // Redirect to the trust rating questions page for the specific period
       window.location.href = "trust-rating.html?name=" + name + "&period=" + period;
     });
   </script>
 </body>
 </html>
+
