@@ -42,11 +42,8 @@
       var race = document.getElementById("race").value;
       var period = document.getElementById("period").value;
 
-      // Store the demographic information and period in separate databases
-      // or perform further processing based on period
-
       // Redirect to the trust rating questions page for the specific period
-      window.location.href = "trust-rating.html?period=" + period;
+      window.location.href = "trust-rating.html?name=" + name + "&period=" + period;
     });
   </script>
 </body>
