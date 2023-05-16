@@ -1,67 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Participant Information</title>
+  <title>Experiment</title>
 </head>
 <body>
-  <h1>Participant Information</h1>
-  <form id="participantForm">
+  <h1>Participant Registration</h1>
+  <form id="registrationForm">
     <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required>
+    <input type="text" id="name" required><br><br>
 
     <label for="age">Age:</label>
-    <input type="number" id="age" name="age" required>
+    <input type="number" id="age" required><br><br>
 
     <label for="gender">Gender:</label>
-    <select id="gender" name="gender" required>
-      <option value="">Select</option>
-      <option value="male">Male</option>
-      <option value="female">Female</option>
-      <option value="other">Other</option>
-    </select>
+    <input type="text" id="gender" required><br><br>
 
-    <label for="race">Race:</label>
-    <select id="race" name="race" required>
-      <option value="">Select</option>
-      <option value="american-indian">American Indian or Alaskan Native</option>
-      <option value="asian-pacific-islander">Asian / Pacific Islander</option>
-      <option value="black-african-american">Black or African American</option>
-      <option value="hispanic">Hispanic</option>
-      <option value="white-caucasian">White / Caucasian</option>
-      <option value="multiple-other">Multiple ethnicity/ Other (please specify)</option>
-    </select>
+    <label for="race">Race/Ethnicity:</label>
+    <select id="race" required>
+      <option value="American Indian or Alaskan Native">American Indian or Alaskan Native</option>
+      <option value="Asian / Pacific Islander">Asian / Pacific Islander</option>
+      <option value="Black or African American">Black or African American</option>
+      <option value="Hispanic">Hispanic</option>
+      <option value="White / Caucasian">White / Caucasian</option>
+      <option value="Multiple ethnicity/ Other">Multiple ethnicity/ Other (please specify)</option>
+    </select><br><br>
 
-    <label for="otherRace">Other Race:</label>
-    <input type="text" id="otherRace" name="otherRace">
-
-    <label for="trustRating">Trust Rating:</label>
-    <input type="number" id="trustRating" name="trustRating" min="1" max="10" required>
+    <label for="period">Period:</label>
+    <input type="number" id="period" min="1" max="10" required><br><br>
 
     <input type="submit" value="Submit">
   </form>
 
   <script>
-    document.getElementById('participantForm').addEventListener('submit', function(event) {
-      event.preventDefault(); // Prevent form submission
+    document.getElementById("registrationForm").addEventListener("submit", function(event) {
+      event.preventDefault();
 
-      // Get form values
-      var name = document.getElementById('name').value;
-      var age = document.getElementById('age').value;
-      var gender = document.getElementById('gender').value;
-      var race = document.getElementById('race').value;
-      var otherRace = document.getElementById('otherRace').value;
-      var trustRating = document.getElementById('trustRating').value;
+      // Retrieve form values
+      var name = document.getElementById("name").value;
+      var age = document.getElementById("age").value;
+      var gender = document.getElementById("gender").value;
+      var race = document.getElementById("race").value;
+      var period = document.getElementById("period").value;
 
-      // Check if Other Race is selected and has a value
-      if (race === 'multiple-other' && otherRace.trim() === '') {
-        alert('Please specify the Other Race.');
-        return;
-      }
+      // Store the demographic information and period in separate databases
+      // or perform further processing based on period
 
-      // TODO: Send form data to backend for storage
-
-      // Reset the form
-      document.getElementById('participantForm').reset();
+      // Redirect to the trust rating questions page for the specific period
+      window.location.href = "trust-rating.html?period=" + period;
     });
   </script>
 </body>
