@@ -6,7 +6,33 @@
 <body>
   <h1>Participant Registration</h1>
   <form id="registrationForm">
-    <!-- form fields -->
+    <label for="name">Name:</label>
+    <input type="text" id="name" required><br><br>
+
+    <label for="age">Age:</label>
+    <input type="number" id="age" required><br><br>
+
+    <label for="gender">Gender:</label>
+    <input type="text" id="gender" required><br><br>
+
+    <label for="race">Race/Ethnicity:</label>
+    <select id="race" required>
+      <option value="American Indian or Alaskan Native">American Indian or Alaskan Native</option>
+      <option value="Asian / Pacific Islander">Asian / Pacific Islander</option>
+      <option value="Black or African American">Black or African American</option>
+      <option value="Hispanic">Hispanic</option>
+      <option value="White / Caucasian">White / Caucasian</option>
+      <option value="Multiple ethnicity/ Other">Multiple ethnicity/ Other (please specify)</option>
+    </select><br><br>
+
+    <label for="period">Period:</label>
+    <input type="number" id="period" min="1" max="10" required><br><br>
+    
+    <label for="email">Email:</label>
+    <input type="email" id="email" required><br><br>
+    
+    <label for="password">Password:</label>
+    <input type="password" id="password" required><br><br>
 
     <input type="submit" value="Submit">
   </form>
@@ -19,7 +45,14 @@
   <script>
     // Initialize Firebase with your configuration
     const firebaseConfig = {
-      // your Firebase config
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      databaseURL: "YOUR_DATABASE_URL",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID",
+      measurementId: "YOUR_MEASUREMENT_ID"
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -37,47 +70,52 @@
       var gender = document.getElementById("gender").value;
       var race = document.getElementById("race").value;
       var period = document.getElementById("period").value;
+      
+      // Retrieve email and password from the user
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("password").value;
 
-      // Check if the user is authenticated when the form is submitted
-      firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-          // User is authenticated, proceed with storing participant data
+      // Create a new user with email and password
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(function(userCredential) {
+          // User creation successful
+          var user = userCredential.user;
 
           // Retrieve the ID token
           user.getIdToken()
-            .then(function(token) {
-              // Perform the write operation, including the authentication token in the request
-              firebase.database()
-                .ref("participants")
-                .push()
-                .set(
-                  {
-                    name: name,
-                    age: age,
-                    gender: gender,
-                    race: race,
-                    period: period
-                  },
-                  { headers: { Authorization: `Bearer ${token}` } }
-                )
-                .then(() => {
-                  console.log("Write operation successful");
-                  // Redirect to the trust rating questions page for the specific period
-                  window.location.href = "trust-rating.html?period=" + period;
-                })
-                .catch((error) => {
-                  console.error("Error storing participant data:", error);
-                });
+        .then(function(token) {
+          // Perform the write operation, including the authentication token in the request
+          firebase.database()
+            .ref("participants")
+            .push()
+            .set(
+              {
+                name: name,
+                age: age,
+                gender: gender,
+                race: race,
+                period: period
+              },
+              { headers: { Authorization: `Bearer ${token}` } }
+            )
+            .then(() => {
+              console.log("Write operation successful");
+              // Redirect to the trust rating questions page for the specific period
+              window.location.href = "trust-rating.html?period=" + period;
             })
-            .catch(function(error) {
-              console.error("Error retrieving ID token:", error);
+            .catch((error) => {
+              console.error("Error storing participant data:", error);
             });
-        } else {
-          // User is not authenticated, handle accordingly
-          console.log("User is not authenticated");
-        }
-      });
+        })
+        .catch(function(error) {
+          console.error("Error retrieving ID token:", error);
+        });
+    })
+    .catch(function(error) {
+      console.error("Error creating user:", error);
     });
+});
   </script>
 </body>
 </html>
+```
