@@ -38,44 +38,45 @@
       var race = document.getElementById("race").value;
       var period = document.getElementById("period").value;
 
-      // Check if the user is authenticated
-      const user = firebase.auth().currentUser;
-      if (user) {
-        // User is authenticated, proceed with storing participant data
-        
-        // Retrieve the ID token
-        user.getIdToken()
-          .then(function(token) {
-            // Perform the write operation, including the authentication token in the request
-            firebase.database()
-              .ref("participants")
-              .push()
-              .set(
-                {
-                  name: name,
-                  age: age,
-                  gender: gender,
-                  race: race,
-                  period: period
-                },
-                { headers: { Authorization: `Bearer ${token}` } }
-              )
-              .then(() => {
-                console.log("Write operation successful");
-                // Redirect to the trust rating questions page for the specific period
-                window.location.href = "trust-rating.html?period=" + period;
-              })
-              .catch((error) => {
-                console.error("Error storing participant data:", error);
-              });
-          })
-          .catch(function(error) {
-            console.error("Error retrieving ID token:", error);
-          });
-      } else {
-        // User is not authenticated, handle accordingly
-        console.log("User is not authenticated");
-      }
+      // Check if the user is authenticated when the form is submitted
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          // User is authenticated, proceed with storing participant data
+
+          // Retrieve the ID token
+          user.getIdToken()
+            .then(function(token) {
+              // Perform the write operation, including the authentication token in the request
+              firebase.database()
+                .ref("participants")
+                .push()
+                .set(
+                  {
+                    name: name,
+                    age: age,
+                    gender: gender,
+                    race: race,
+                    period: period
+                  },
+                  { headers: { Authorization: `Bearer ${token}` } }
+                )
+                .then(() => {
+                  console.log("Write operation successful");
+                  // Redirect to the trust rating questions page for the specific period
+                  window.location.href = "trust-rating.html?period=" + period;
+                })
+                .catch((error) => {
+                  console.error("Error storing participant data:", error);
+                });
+            })
+            .catch(function(error) {
+              console.error("Error retrieving ID token:", error);
+            });
+        } else {
+          // User is not authenticated, handle accordingly
+          console.log("User is not authenticated");
+        }
+      });
     });
   </script>
 </body>
