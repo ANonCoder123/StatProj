@@ -38,14 +38,14 @@
   <script>
     // Initialize Firebase with your configuration
     const firebaseConfig = {
-      apiKey: "AIzaSyDCQsvxFwCd7MYoTd_sX_hBLm1qaAXKYCE",
-      authDomain: "statpsych-9ff2a.firebaseapp.com",
-      databaseURL: "https://statpsych-9ff2a-default-rtdb.firebaseio.com",
-      projectId: "statpsych-9ff2a",
-      storageBucket: "statpsych-9ff2a.appspot.com",
-      messagingSenderId: "920441366178",
-      appId: "1:920441366178:web:bb36fe038d209458bc99fb",
-      measurementId: "G-RW90TV8H9W"
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      databaseURL: "YOUR_DATABASE_URL",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID",
+      measurementId: "YOUR_MEASUREMENT_ID"
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -53,31 +53,34 @@
     // Get a reference to the Firebase database
     const database = firebase.database();
 
-    document.getElementById("registrationForm").addEventListener("submit", function(event) {
+    document.getElementById("registrationForm").addEventListener("submit", async function(event) {
       event.preventDefault();
 
       // Retrieve form values
-      var name = document.getElementById("name").value;
-      var age = document.getElementById("age").value;
-      var gender = document.getElementById("gender").value;
-      var race = document.getElementById("race").value;
-      var period = document.getElementById("period").value;
+      const name = document.getElementById("name").value;
+      const age = document.getElementById("age").value;
+      const gender = document.getElementById("gender").value;
+      const race = document.getElementById("race").value;
+      const period = document.getElementById("period").value;
 
-      // Store the participant data in Firebase
-      database.ref("participants").push().set({
-        name: name,
-        age: age,
-        gender: gender,
-        race: race,
-        period: period
-      })
-      .then(function() {
+      try {
+        // Store the participant data in Firebase
+        const user = firebase.auth().currentUser;
+        const token = await user.getIdToken();
+
+        await firebase.database().ref("statpsych-9ff2a/participants").push().set({
+          name: name,
+          age: age,
+          gender: gender,
+          race: race,
+          period: period
+        }, { headers: { Authorization: `Bearer ${token}` } });
+
         // Redirect to the trust rating questions page for the specific period
         window.location.href = "trust-rating.html?period=" + period;
-      })
-      .catch(function(error) {
+      } catch (error) {
         console.log("Error storing participant data:", error);
-      });
+      }
     });
   </script>
 </body>
