@@ -20,14 +20,14 @@
   <script>
     // Initialize Firebase with your configuration
     const firebaseConfig = {
-      apiKey: "AIzaSyDCQsvxFwCd7MYoTd_sX_hBLm1qaAXKYCE",
-      authDomain: "statpsych-9ff2a.firebaseapp.com",
-      databaseURL: "https://statpsych-9ff2a-default-rtdb.firebaseio.com",
-      projectId: "statpsych-9ff2a",
-      storageBucket: "statpsych-9ff2a.appspot.com",
-      messagingSenderId: "920441366178",
-      appId: "1:920441366178:web:bb36fe038d209458bc99fb",
-      measurementId: "G-RW90TV8H9W"
+      apiKey: "<YOUR_API_KEY>",
+      authDomain: "<YOUR_AUTH_DOMAIN>",
+      databaseURL: "<YOUR_DATABASE_URL>",
+      projectId: "<YOUR_PROJECT_ID>",
+      storageBucket: "<YOUR_STORAGE_BUCKET>",
+      messagingSenderId: "<YOUR_MESSAGING_SENDER_ID>",
+      appId: "<YOUR_APP_ID>",
+      measurementId: "<YOUR_MEASUREMENT_ID>"
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -37,11 +37,10 @@
 
     // Retrieve the group and period from the URL query parameters
     const urlParams = new URLSearchParams(window.location.search);
-    const group = urlParams.get("group");
     const period = urlParams.get("period");
 
     // Retrieve the names of people from the same period
-    database.ref("statpsych-9ff2a/participants")
+    database.ref("participants")
       .orderByChild("period")
       .equalTo(period)
       .once("value")
@@ -92,13 +91,22 @@
       ratingInputs.forEach(function(input) {
         ratings.push(input.value);
       });
-      
-      // Do further processing with the ratings or store them as needed
-  // Optionally, redirect to a thank you page or display a success message
-  alert("Thank you for your ratings!");
 
-  // Replace "thank-you.html" with the desired destination page
-  window.location.href = "thank-you.html";
+      // Perform the write operation to store the ratings
+      firebase.database()
+        .ref("ratings")
+        .push({
+          period: period,
+          ratings: ratings
+    })
+    .then(() => {
+      console.log("Ratings stored successfully");
+      // Replace "thank-you.html" with the desired destination page
+      window.location.href = "thank-you.html";
+    })
+    .catch((error) => {
+      console.error("Error storing ratings:", error);
+    });
 });
   </script>
 </body>
